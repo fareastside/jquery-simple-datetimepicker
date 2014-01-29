@@ -1064,7 +1064,8 @@
 			"minTime":"00:00",
 			"maxTime":"23:59",
 			"onShow": null,
-			"onHide": null
+			"onHide": null,
+      "twelveHourFormat": false
 		};
 	};
 	
