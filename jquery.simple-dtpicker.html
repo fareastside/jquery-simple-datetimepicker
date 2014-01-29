@@ -75,6 +75,18 @@
 				});
 			});
 		</script>
+
+		<h4>Twelve-Hour Format with Meridiem</h4>
+		<input type="text" name="twelvehourex" value="">
+		<script type="text/javascript">
+			$(function(){
+				$('*[name=twelvehourex]').appendDtpicker({
+					"inline": true,
+					"dateFormat": "YY/MM/DD i:mm A",
+					"twelveHourFormat": true
+				});
+			});
+		</script>
 		
 
 		<h4>locale ("locale": "ja")</h4>
