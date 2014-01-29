@@ -256,8 +256,8 @@
 			// Match a string with date format
 			var df = opt_date_format.replace(/(-|\/)/g, '[-\/]')
 				.replace(/YYYY/gi, '(\\d{2,4})')
-				.replace(/(YY|MM|DD|hh|mm)/g, '(\\d{1,2})')
-				.replace(/(M|D|h|m)/g, '(\\d{1,2})');
+				.replace(/(YY|MM|DD|hh|ii|mm)/g, '(\\d{1,2})')
+				.replace(/(M|D|h|i|m|A)/g, '(\\d{1,2})');
 			var re = new RegExp(df);
 			var m = re.exec(str);
 			if( m != null){
@@ -270,7 +270,7 @@
 				while (df != null && 0 < df.length) {
 					var format_c = df.substring(0, 1); df = df.substring(1, df.length);
 					if (format_before_c != format_c) {
-						if(/(YYYY|YY|MM|DD|mm|dd|M|D|h|m)/.test(format_buf)){
+						if(/(YYYY|YY|MM|DD|mm|dd|M|D|h|i|m|A)/.test(format_buf)){
 							formats.push( format_buf );
 							format_buf = '';
 						} else {
@@ -280,7 +280,7 @@
 					format_buf += format_c;
 					format_before_c = format_c;
 				}
-				if (format_buf != '' && /(YYYY|YY|MM|DD|mm|dd|M|D|h|m)/.test(format_buf)){
+				if (format_buf != '' && /(YYYY|YY|MM|DD|mm|dd|M|D|h|i|m|A)/.test(format_buf)){
 					formats.push( format_buf );
 				}
 
@@ -310,10 +310,18 @@
 					} else if(f == 'hh' || f == 'h'){
 						date.setHours(d);
 						is_successful = true;
-					} else if(f == 'mm' || f == 'm'){
+					} else if(f == 'ii' || f == 'i'){
+            date.setHours(d);
+            is_successful = true;
+          } else if(f == 'mm' || f == 'm'){
 						date.setMinutes(d);
 						is_successful = true;
-					} 
+					} else if(f == 'A' && d.toUpperCase == 'PM'){
+            var h = date.getHours();
+            date.setHours(h+12);
+            is_successful = true;
+          }
+
 				}
 
 				if(is_successful == true && isNaN(date) == false && isNaN(date.getDate()) == false){ // Parse successful
@@ -363,8 +371,11 @@
 		.replace(/D/g, d)
 		.replace(/hh/g, zpadding(hou))
 		.replace(/h/g, hou)
+    .replace(/ii/g, zpadding(twelveHour(hou)))
+    .replace(/i/g, twelveHour(hou)) 
 		.replace(/mm/g, zpadding(min))
-		.replace(/m/g, min);
+		.replace(/m/g, min)
+    .replace(/A/g, meridiem(hou));
 		return date_format;
 	};
 
@@ -388,6 +399,24 @@
 		var $picker = getParentPickerObject($obj);
 		return $picker.data("pickedDate");
 	};
+
+  var twelveHour = function(hou) {
+    if (hou == 0) {
+      return 12;
+    } else if (hou > 12) {
+      return (hou - 12);
+    } else {
+      return hou;
+    }
+  };
+
+  var meridiem = function(hou) {
+    if (hou < 12) {
+      return "AM";
+    } else {
+      return "PM";
+    }
+  }
 
 	var zpadding = function(num) {
 		num = ("0" + num).slice(-2);
@@ -712,7 +741,15 @@
 				var isPast = isCurrentDay && isPastTime;
 				
 				$o.addClass('timelist_item');
-				$o.text(zpadding(hour) + ":" + zpadding(min));
+
+        var optText;
+        if ($picker.data("twelveHourFormat") == true) {
+          optText = twelveHour(hour) + ":" + zpadding(min) + meridiem(hour).toLowerCase();
+        } else{
+          optText = zpadding(hour) + ":" + zpadding(min);
+        }
+
+				$o.text(optText);
 
 				$o.data("hour", hour);
 				$o.data("min", min);
@@ -878,6 +915,7 @@
 		$picker.data('futureOnly', opt.futureOnly);
 		$picker.data('onShow', opt.onShow);
 		$picker.data('onHide', opt.onHide);
+    $picker.data('twelveHourFormat', opt.twelveHourFormat)
 
 		var minDate = Date.parse(opt.minDate);
 		if (isNaN(minDate)) { // invalid date?
@@ -1109,6 +1147,10 @@
 			$(input).change(function(){
 				$(this).trigger('keyup');
 			});
+
+      if(options.twelveHourFormat == true){
+        $picker.data('twelveHourFormat',true);
+      }
 	
 			if(options.inline == true){
 				/* inline mode */
