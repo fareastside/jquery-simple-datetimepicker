@@ -978,7 +978,11 @@
 		/* Timelist */
 		var $timelist = $('<div>');
 		$timelist.addClass('datepicker_timelist');
+    if ($picker.data('twelveHourFormat') == true) {
+      $timelist.addClass('twelve_hour');
+    }
 		$inner.append($timelist);
+
 
 		/* Set event handler to picker */
 		$picker.hover(

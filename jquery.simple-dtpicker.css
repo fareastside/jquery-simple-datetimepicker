@@ -224,6 +224,10 @@
 	-moz-border-radius-bottomright:	3px;
 }
 
+.datepicker > .datepicker_inner_container > .datepicker_timelist.twelve_hour {
+	width: 5em;
+}
+
 /*
 .datepicker > .datepicker_inner_container > .datepicker_timelist::after {
 	content: ".";
