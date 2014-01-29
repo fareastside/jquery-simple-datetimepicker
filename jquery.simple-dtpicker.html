@@ -222,6 +222,17 @@
 				});
 			});
 		</script>
+
+		<h4>Time-only mode ("timeOnly": true)</h4>
+		<input type="text" name="timeOnly" value="">
+		<script type="text/javascript">
+			$(function(){
+				$('*[name=timeOnly]').appendDtpicker({
+					"inline": true,
+					"timeOnly": true
+				});
+			});
+		</script>
 		
 		<h4>Only allow future datetimes ("futureOnly": true)</h4>
 		<input type="text" name="date16" value="">
