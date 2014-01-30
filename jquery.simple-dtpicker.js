@@ -1157,6 +1157,10 @@
 						var $input = InputObjects[$picker.data("inputObjectId")];
 						var handler = new PickerHandler($picker, $input);
 						handler.hide();
+            var func = $picker.data('onHide');
+            if (func != null) {
+              func(handler);
+            }
 					}
 				}
 			}
