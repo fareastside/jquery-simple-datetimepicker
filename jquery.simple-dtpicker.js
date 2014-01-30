@@ -257,11 +257,11 @@
 			var df = opt_date_format.replace(/(-|\/)/g, '[-\/]')
 				.replace(/YYYY/gi, '(\\d{2,4})')
 				.replace(/(YY|MM|DD|hh|ii|mm)/g, '(\\d{1,2})')
-				.replace(/(M|D|h|i|m|A)/g, '(\\d{1,2})');
+				.replace(/(M|D|h|i|m)/g, '(\\d{1,2})')
+        .replace(/A/g, '((A|P)M)');
 			var re = new RegExp(df);
 			var m = re.exec(str);
 			if( m != null){
-
 				// Generate the formats array (convert-table)
 				var formats = new Array();
 				var format_buf = '';
@@ -316,7 +316,7 @@
           } else if(f == 'mm' || f == 'm'){
 						date.setMinutes(d);
 						is_successful = true;
-					} else if(f == 'A' && d.toUpperCase == 'PM'){
+					} else if(f == 'A' && d.toUpperCase() == 'PM'){
             var h = date.getHours();
             date.setHours(h+12);
             is_successful = true;
