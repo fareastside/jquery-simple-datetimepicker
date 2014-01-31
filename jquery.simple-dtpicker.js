@@ -229,14 +229,17 @@
 		}, date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes());
 	};
 
-	var getDateFormat = function(format, locale, is_date_only) {
+	var getDateFormat = function(format, locale, is_date_only, is_time_only) {
 		if (format == "default"){
 			// Default format
 			format = translate(locale,'format');
 			if (is_date_only) {
 				// Convert the format to date-only (ex: YYYY/MM/DD)
 				format = format.substring(0, format.search(' '));
-			}
+			} else if (is_time_only) {
+        // Convert the format to time-only (ex: hh:mm)
+        format = format.substring(format.search(' ')+1);
+      }
 		}
 		return format; // Return date-format
 	};
@@ -386,7 +389,7 @@
 		}
 		var date = getPickedDate($picker);
 		var locale = $picker.data("locale");
-		var format = getDateFormat($picker.data("dateFormat"), locale, $picker.data('dateOnly'));
+		var format = getDateFormat($picker.data("dateFormat"), locale, $picker.data('dateOnly'), $picker.data('timeOnly'));
 		
 		var old = $inp.val();                        
 		$inp.val(getFormattedDate(date, format));
@@ -719,6 +722,10 @@
 			/* dateOnly mode */
 			$timelist.css("display", "none");
 		} else {
+      if ($picker.data("timeOnly") == true) {
+       $calendar.css("display", "none");
+       $header.css("display", "none");
+      }
 			/* Timelist ----- */
 			$timelist.children().remove();
 
@@ -889,7 +896,7 @@
 		if(!opt.current) {
 			opt.current = new Date();
 		} else {
-			var format = getDateFormat(opt.dateFormat, opt.locale, opt.dateOnly);
+			var format = getDateFormat(opt.dateFormat, opt.locale, opt.dateOnly, opt.timeOnly);
 			var date = parseDate(opt.current, format);
 			if (date) {
 				opt.current = date;
@@ -903,6 +910,7 @@
 			$picker.data("inputObjectId", opt.inputObjectId);
 		}
 		$picker.data("dateOnly", opt.dateOnly);
+    $picker.data("timeOnly", opt.timeOnly);
 		$picker.data("pickerId", PickerObjects.length);
 		$picker.data("dateFormat", opt.dateFormat);
 		$picker.data("locale", opt.locale);
@@ -1057,6 +1065,7 @@
 			"calendarMouseScroll": true,
 			"todayButton": true,
 			"dateOnly": false,
+      "timeOnly": false,
 			"futureOnly": false,
 			"minDate" : null,
 			"maxDate" : null,
@@ -1137,7 +1146,7 @@
 					$input.data('beforeVal') == null ||
 					( $input.data('beforeVal') != null && $input.data('beforeVal') != $input.val())	)
 					) { /* beforeValue == null || beforeValue != nowValue  */
-					var format = getDateFormat($picker.data('dateFormat'), $picker.data('locale'), $picker.data('dateOnly'));
+					var format = getDateFormat($picker.data('dateFormat'), $picker.data('locale'), $picker.data('dateOnly'), $picker.data('timeOnly'));
 					var date = parseDate($input.val(), format);
 					if (date) {
 						draw_date($picker, {
