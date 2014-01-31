@@ -1149,7 +1149,8 @@
 		$(document).mousedown(function(e){
 			for(var i=0;i<PickerObjects.length;i++){
 				var $picker = $(PickerObjects[i]);
-				if($(e.target).parents('.datepicker').length == 0){	/* if not-active picker */
+        
+				if($(e.target).parents('.datepicker').length == 0 && $(e.target).next().children('.datepicker').filter(':visible').length == 0){	/* if not-active picker */
 					if($picker.data("inputObjectId") != null && $picker.data("isInline") == false && $picker.css('display') != 'none'){
 						/* if append input-field && float picker */
 
