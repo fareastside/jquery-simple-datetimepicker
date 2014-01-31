@@ -319,10 +319,22 @@
           } else if(f == 'mm' || f == 'm'){
 						date.setMinutes(d);
 						is_successful = true;
-					} else if(f == 'A' && d.toUpperCase() == 'PM'){
+					} else if(f == 'A' ){
             var h = date.getHours();
-            date.setHours(h+12);
-            is_successful = true;
+            if(d.toUpperCase() == 'PM'){
+              if (h == 12){
+                is_successful = true;
+              } else{
+                date.setHours(h+12);
+                is_successful = true;
+              }
+            } else if (d.toUpperCase() == 'AM'){
+              if (h != 12){
+                is_successful = true;
+              } else {
+                date.setHours(0);
+              }
+            }
           }
 
 				}
