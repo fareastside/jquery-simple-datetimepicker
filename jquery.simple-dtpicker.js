@@ -529,10 +529,10 @@
 
 		/* Fade-out animation */
 		if (isAnim == true) {
-			if(changePoint == "calendar"){
+			if(changePoint == "calendar" && $picker.data("timeOnly") == false){
 				$calendar.stop().queue([]);
 				$calendar.fadeTo("fast", 0.8);
-			}else if(changePoint == "timelist"){
+			}else if(changePoint == "timelist" && $picker.data("dateOnly") == false){
 				$timelist.stop().queue([]);
 				$timelist.fadeTo("fast", 0.8);
 			}
@@ -880,9 +880,9 @@
 		
 		/* Fade-in animation */
 		if (isAnim == true) {
-			if(changePoint == "calendar"){
-				$calendar.fadeTo("fast", 1.0);
-			}else if(changePoint == "timelist"){
+			if(changePoint == "calendar" && $picker.data("timeOnly") == false){
+  			$calendar.fadeTo("fast", 1.0);
+			}else if(changePoint == "timelist" && $picker.data("dateOnly") == false){
 				$timelist.fadeTo("fast", 1.0);
 			}
 		}
